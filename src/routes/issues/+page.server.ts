@@ -2,9 +2,11 @@ import type { PageServerLoad } from './$types';
 import { listMyIssues } from '$lib/server/github/issues';
 import type { ContentItem } from '$lib/types/content';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url }) => {
+	const search = url.searchParams.get('query') ?? '';
+
 	try {
-		const issues = await listMyIssues({ perPage: 30 });
+		const issues = await listMyIssues({ perPage: 30, search });
 		const items: ContentItem[] = issues.map((issue) => ({
 			id: issue.id,
 			title: issue.title,
@@ -18,9 +20,9 @@ export const load: PageServerLoad = async () => {
 			meta: issue.body ?? undefined
 		}));
 
-		return { items, error: null as string | null };
+		return { items, error: null as string | null, query: search };
 	} catch (error) {
 		const message = error instanceof Error ? error.message : 'Unable to load issues.';
-		return { items: [], error: message };
+		return { items: [], error: message, query: search };
 	}
 };

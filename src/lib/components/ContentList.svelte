@@ -33,10 +33,14 @@
 								<span class="rounded-sm border border-slate-700 px-2 py-1 text-slate-200">{item.typeLabel}</span>
 								<span class="text-slate-400">{item.repo}</span>
 								{#if item.status}
-									<span class="rounded-sm border border-slate-700 px-2 py-1 text-slate-200">{item.status}</span>
-								{/if}
-								{#if item.badge}
-									<span class="rounded-sm border border-slate-700 px-2 py-1 text-slate-200">{item.badge}</span>
+									<span
+										class="rounded-sm px-2 py-1 text-xs font-medium
+											{item.status === 'open' ? 'bg-emerald-700/20 text-emerald-200 border border-emerald-700' : ''}
+											{item.status === 'closed' ? 'bg-red-700/20 text-red-200 border border-red-700' : ''}
+											{item.status !== 'open' && item.status !== 'closed' ? 'border border-slate-700 text-slate-200' : ''}"
+									>
+										{item.status}
+									</span>
 								{/if}
 							</div>
 							<p class="text-base font-semibold leading-snug text-slate-100 line-clamp-2">{item.title}</p>

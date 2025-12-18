@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
 	import CommentsPanel from '$lib/components/CommentsPanel.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -8,6 +9,19 @@
 
 	const { pullRequest, comments } = data;
 	const basePath = `/pull-requests/${pullRequest.repo.owner}/${pullRequest.repo.name}/${pullRequest.number}`;
+
+	const handleSubmit = async (event: CustomEvent<{ body: string }>) => {
+		const res = await fetch(`${basePath}/comment`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ body: event.detail.body })
+		});
+		if (res.ok) {
+			await invalidateAll();
+		} else {
+			console.error('Failed to post comment');
+		}
+	};
 </script>
 
 <svelte:head>
@@ -35,7 +49,7 @@
 		</article>
 	</div>
 
-	<CommentsPanel comments={comments} />
+	<CommentsPanel comments={comments} on:submit={handleSubmit} />
 </section>
 
 <style>

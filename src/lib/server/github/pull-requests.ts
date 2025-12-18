@@ -112,8 +112,10 @@ function mapToSummary(item: SearchPullRequestItem): PullRequestSummary {
 	};
 }
 
-export async function listMyPullRequests({ perPage = DEFAULT_PAGE_SIZE } = {}): Promise<PullRequestSummary[]> {
-	const query = encodeURIComponent('is:pr author:@me archived:false');
+export async function listMyPullRequests({ perPage = DEFAULT_PAGE_SIZE, search }: { perPage?: number; search?: string } = {}): Promise<PullRequestSummary[]> {
+	const parts = ['is:pr', 'author:@me', 'archived:false'];
+	if (search?.trim()) parts.push(search.trim());
+	const query = encodeURIComponent(parts.join(' '));
 	const path = `/search/issues?q=${query}&sort=updated&order=desc&per_page=${perPage}`;
 	const response = await githubFetch<SearchPullRequestsResponse>(path);
 
@@ -198,4 +200,31 @@ export async function listPullRequestComments(params: {
 		createdAt: comment.created_at,
 		updatedAt: comment.updated_at
 	}));
+}
+
+export async function addPullRequestComment(params: {
+	owner: string;
+	repo: string;
+	number: number;
+	body: string;
+}): Promise<Comment> {
+	const { owner, repo, number, body } = params;
+	const comment = await githubFetch<PullRequestCommentResponse>(`/repos/${owner}/${repo}/issues/${number}/comments`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ body })
+	});
+
+	return {
+		id: comment.id,
+		body: comment.body,
+		author: {
+			login: comment.user.login,
+			avatarUrl: comment.user.avatar_url
+		},
+		createdAt: comment.created_at,
+		updatedAt: comment.updated_at
+	};
 }

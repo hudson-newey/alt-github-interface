@@ -2,7 +2,7 @@ import { githubFetch } from './client';
 import { parseRepoFromUrl } from './repos-util.ts';
 import type { Comment } from '$lib/types/comment';
 
-const DEFAULT_PAGE_SIZE = 30;
+const DEFAULT_PAGE_SIZE = 10;
 
 interface SearchIssueItem {
 	id: number;
@@ -94,9 +94,11 @@ function mapToSummary(item: SearchIssueItem): IssueSummary {
 	};
 }
 
-export async function listMyIssues({ perPage = DEFAULT_PAGE_SIZE } = {}): Promise<IssueSummary[]> {
-	const query = encodeURIComponent('is:issue involves:@me archived:false');
-	const path = `/search/issues?q=${query}&sort=updated&order=desc&per_page=${perPage}`;
+export async function listMyIssues({ perPage = DEFAULT_PAGE_SIZE, search }: { perPage?: number; search?: string } = {}): Promise<IssueSummary[]> {
+	const parts = ['is:issue', 'involves:@me', 'archived:false'];
+	if (search?.trim()) parts.push(search.trim());
+	const query = encodeURIComponent(parts.join(' '));
+	const path = `/search/issues?q=${query}&sort=updated&per_page=${perPage}`;
 	const response = await githubFetch<SearchIssuesResponse>(path);
 
 	return response.items.map(mapToSummary);
@@ -148,4 +150,31 @@ export async function listIssueComments(params: {
 		createdAt: comment.created_at,
 		updatedAt: comment.updated_at
 	}));
+}
+
+export async function addIssueComment(params: {
+	owner: string;
+	repo: string;
+	number: number;
+	body: string;
+}): Promise<Comment> {
+	const { owner, repo, number, body } = params;
+	const comment = await githubFetch<IssueCommentResponse>(`/repos/${owner}/${repo}/issues/${number}/comments`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ body })
+	});
+
+	return {
+		id: comment.id,
+		body: comment.body,
+		author: {
+			login: comment.user.login,
+			avatarUrl: comment.user.avatar_url
+		},
+		createdAt: comment.created_at,
+		updatedAt: comment.updated_at
+	};
 }

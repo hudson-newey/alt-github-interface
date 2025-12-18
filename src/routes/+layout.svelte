@@ -2,6 +2,8 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+	import { prefetch, prefetchRoutes } from '$app/navigation';
 
 	let { children } = $props();
 
@@ -12,6 +14,13 @@
 	];
 
 	const isActive = (href: string) => page.url.pathname === href;
+
+	onMount(() => {
+		// Preload code and data for list pages so navigation is instant.
+		prefetchRoutes(['/pull-requests', '/issues']);
+		prefetch('/pull-requests');
+		prefetch('/issues');
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -20,8 +29,8 @@
 	<div class="relative mx-auto max-w-6xl px-6 pb-16">
 		<header class="flex flex-col gap-4 border-b border-slate-800 py-8 sm:flex-row sm:items-center sm:justify-between">
 			<div>
-				<p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">A faster solution</p>
-				<h1 class="text-3xl font-semibold">Git</h1>
+				<p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500"></p>
+				<h1 class="text-3xl font-semibold">Fast GitHub</h1>
 			</div>
 			<nav class="flex flex-wrap gap-2 rounded-md border border-slate-800 bg-black/60 p-2">
 				{#each links as link (link.href)}
