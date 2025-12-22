@@ -4,6 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"dependencies": {
+		"prismjs": "^1.29.0",
 		"marked": "^14.1.2",
 		"xss": "^1.0.15"
 	},

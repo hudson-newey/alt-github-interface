@@ -18,6 +18,7 @@
     "npm:prettier-plugin-svelte@^3.4.0": "3.4.1_prettier@3.7.4_svelte@5.46.0__acorn@8.15.0",
     "npm:prettier-plugin-tailwindcss@~0.7.2": "0.7.2_prettier@3.7.4_prettier-plugin-svelte@3.4.1__prettier@3.7.4__svelte@5.46.0___acorn@8.15.0_svelte@5.46.0__acorn@8.15.0",
     "npm:prettier@^3.7.4": "3.7.4",
+    "npm:prismjs@^1.29.0": "1.30.0",
     "npm:svelte-check@^4.3.4": "4.3.4_svelte@5.46.0__acorn@8.15.0_typescript@5.9.3",
     "npm:svelte@^5.45.6": "5.46.0_acorn@8.15.0",
     "npm:tailwindcss@^4.1.17": "4.1.18",
@@ -1477,6 +1478,9 @@
       "integrity": "sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==",
       "bin": true
     },
+    "prismjs@1.30.0": {
+      "integrity": "sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw=="
+    },
     "punycode@2.3.1": {
       "integrity": "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="
     },
@@ -1810,6 +1814,7 @@
         "npm:prettier-plugin-svelte@^3.4.0",
         "npm:prettier-plugin-tailwindcss@~0.7.2",
         "npm:prettier@^3.7.4",
+        "npm:prismjs@^1.29.0",
         "npm:svelte-check@^4.3.4",
         "npm:svelte@^5.45.6",
         "npm:tailwindcss@^4.1.17",
