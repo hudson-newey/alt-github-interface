@@ -1,4 +1,4 @@
-# Fast GitHub Interface
+# Alt GitHub Interface
 
 SvelteKit + Tailwind playground for a faster GitHub view. The home page lists your pull requests sorted by last update using the GitHub REST API.
 
